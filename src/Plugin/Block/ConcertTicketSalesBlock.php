@@ -5,10 +5,10 @@ namespace Drupal\drupal_ajax_form_example\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\drupal_ajax_form_example\Form\TabulatorForm;
+use Drupal\drupal_ajax_form_example\Form\AjaxForm;
 
 /**
- * Provides a 'TabulatorBlock' block.
+ * Provides a 'Concert Ticket Sales' block.
  *
  * @Block(
  *  id = "concert_ticket_sales_block",
