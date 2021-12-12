@@ -1,0 +1,79 @@
+image: drupal:9-php7.4-fpm
+
+# before_script:
+#     # bash utils
+#     - apt-get update
+#     - apt-get install -y --no-install-recommends vim curl debconf subversion git apt-transport-https apt-utils
+#     - apt-get update
+#     - apt-get install -y build-essential locales acl mailutils wget zip unzip
+#     - apt-get install -y gnupg gnupg1 gnupg2
+#     # composer
+#     - curl -sS https://getcomposer.org/installer | php
+#     - mv composer.phar /usr/local/bin/composer
+#     - chmod +x /usr/local/bin/composer
+#     - composer -V
+#     - echo "export PATH=\$PATH:~/.composer/vendor/bin" >> ~/.bashrc
+
+.build_php_composer: &build_php_composer |
+    # bash utils
+    apt-get update
+    apt-get install -y --no-install-recommends vim curl debconf subversion git apt-transport-https apt-utils
+    apt-get update
+    apt-get install -y build-essential locales acl mailutils wget zip unzip
+    apt-get install -y gnupg gnupg1 gnupg2
+    # composer
+    curl -sS https://getcomposer.org/installer | php
+    mv composer.phar /usr/local/bin/composer
+    chmod +x /usr/local/bin/composer
+    composer -V
+    echo "export PATH=\$PATH:~/.composer/vendor/bin" >> ~/.bashrc
+
+
+stages:
+#  - build
+  - test
+
+
+# build:
+#  stage: build
+ # environment:
+ #   name: dev
+ #   url: $TEST_SERVER
+ # script:
+   # - *build_php_composer
+   # - composer global require drupal/coder
+   # - composer global require dealerdirect/phpcodesniffer-composer-installer
+   # - ln -s ~/.composer/vendor/bin/phpcs /usr/local/bin
+   # - ln -s ~/.composer/vendor/bin/phpcbf /usr/local/bin
+   # - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
+   # - phpcs -i
+   # - source ~/.bashrc
+   # # - composer global require drush/drush:dev-master
+   # # - drush pm-download coder --destination=$HOME/.drush
+   # - composer global require squizlabs/PHP_CodeSniffer:\>=2
+   # - phpcs --version
+ # only:
+ #   - branch_name
+test:
+  stage: test
+  script:
+    - *build_php_composer
+    - git checkout git_ci
+    - composer global require drupal/coder
+    - composer global require dealerdirect/phpcodesniffer-composer-installer
+    - ln -s ~/.composer/vendor/bin/phpcs /usr/local/bin
+    - ln -s ~/.composer/vendor/bin/phpcbf /usr/local/bin
+    - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
+    - phpcs -i
+    - source ~/.bashrc
+    # - composer global require drush/drush:dev-master
+    # - drush pm-download coder --destination=$HOME/.drush
+    - composer global require squizlabs/PHP_CodeSniffer:\>=2
+    - phpcs --version
+    - >
+      phpcs
+      --standard=Drupal
+      --standard=phpcs.xml
+      --error-severity=5
+      --warning-severity=8
+      --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml .

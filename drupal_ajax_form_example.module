@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Contains drupal_ajax_form_example.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function drupal_ajax_form_example_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the rep_profile_migrate module.
+    case 'help.page.drupal_ajax_form_example':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('FAS Tabulator for student tuition fees.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function drupal_ajax_form_example_theme() {
+
+  return [
+    'tabulator_block' => [
+      'variables' => [
+        'content' => NULL,
+      ],
+      'render element' => 'children',
+    ],
+    ];
+
+}

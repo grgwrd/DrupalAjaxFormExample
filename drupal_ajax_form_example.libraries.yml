@@ -1,0 +1,13 @@
+drupal_ajax_form_example.library:
+  version: 1.x
+  css:
+    base:
+      css/drupal_ajax_form_example.css: {}
+  js:
+    js/drupal_ajax_form_example.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+#    - core/drupalSettings
+#    - core/drupal.dialog.ajax
+#    - core/jquery.form

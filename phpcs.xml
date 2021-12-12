@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="drupal_examples">
+  <description>Default PHP CodeSniffer configuration for Examples for Developers.</description>
+  <arg name="ignore" value="*.md,*.txt" />
+
+  <file>src</file>
+
+  <arg name="extensions" value="css,inc,install,module,php,profile,test,theme"/>
+
+  <!-- <rule ref="Drupal.Array"/> -->
+
+  <!-- <rule ref="Drupal.CSS"/> -->
+
+  <rule ref="Drupal.Commenting">
+      <exclude name="Drupal.Commenting.DocComment.MissingShort"/>
+      <exclude name="Drupal.Commenting.VariableComment.Missing"/>
+      <exclude name="Drupal.Commenting.FunctionComment.MissingParamComment" />
+      <exclude name="Drupal.Commenting.FunctionComment.MissingParamType" />
+      <exclude name="Drupal.Commenting.DocComment.ShortSingleLine" />
+      <!-- TagsNotGrouped has false positives for @code/@endcode. See
+        https://www.drupal.org/node/2502837 -->
+      <exclude name="Drupal.Commenting.DocComment.TagsNotGrouped"/>
+      <!-- We have to document hooks in a non-standard way in order to be
+        informative -->
+      <exclude name="Drupal.Commenting.HookComment.HookParamDoc"/>
+      <exclude name="Drupal.Commenting.HookComment.HookReturnDoc"/>
+  </rule>
+
+</ruleset>
+<!-- <rule ref="DrupalPractice"> -->
+  <!-- Allow empty lines after comments, we don't care. -->
+  <!-- <exclude name="DrupalPractice.Commenting.CommentEmptyLine"/>
+</rule> -->

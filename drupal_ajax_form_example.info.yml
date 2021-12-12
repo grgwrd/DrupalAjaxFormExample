@@ -1,0 +1,10 @@
+name: drupal_ajax_form_example
+type: module
+description: 'Drupal Ajax Form Example'
+core_version_requirement: ^8.8.0 || ^9.0
+version: '1.0'
+dependencies:
+  - 'drupal:menu_ui'
+  - 'drupal:path'
+  - menu_ui
+package: ''

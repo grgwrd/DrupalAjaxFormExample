@@ -1,0 +1,13 @@
+{
+    "name": "drupal/drupal_ajax_form_example",
+    "type": "drupal-module",
+    "description": "Drupal Ajax Form Example",
+    "keywords": [
+    ],
+    "homepage": "",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "",
+        "source": ""
+    }
+}

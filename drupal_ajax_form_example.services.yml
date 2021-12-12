@@ -1,0 +1,5 @@
+services:
+  drupal_ajax_form_example.concert_data:
+    class: Drupal\drupal_ajax_form_example\ConcertData
+    arguments:
+      - '@entity_type.manager'
