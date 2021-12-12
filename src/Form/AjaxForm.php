@@ -5,9 +5,6 @@ namespace Drupal\drupal_ajax_form_example\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-/**
- * Class TabulatorForm.
- */
 class AjaxForm extends FormBase {
 
   /**
@@ -18,7 +15,7 @@ class AjaxForm extends FormBase {
   protected $artists;
 
   /**
-   * TabulatorBlock constructor.
+   * AjaxForm constructor.
    *
    * @param $concerts
    * @param $artists
@@ -207,7 +204,7 @@ class AjaxForm extends FormBase {
     }
 
     return $tickets_list;
-    
+
   }
 
 
