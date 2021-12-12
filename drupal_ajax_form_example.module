@@ -17,7 +17,7 @@ function drupal_ajax_form_example_help($route_name, RouteMatchInterface $route_m
     case 'help.page.drupal_ajax_form_example':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('FAS Tabulator for student tuition fees.') . '</p>';
+      $output .= '<p>' . t('Drupal Ajax Form Example.') . '</p>';
       return $output;
 
     default:
@@ -30,7 +30,7 @@ function drupal_ajax_form_example_help($route_name, RouteMatchInterface $route_m
 function drupal_ajax_form_example_theme() {
 
   return [
-    'tabulator_block' => [
+    'drupal_ajax_form_example' => [
       'variables' => [
         'content' => NULL,
       ],

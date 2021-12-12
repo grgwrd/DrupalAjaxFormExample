@@ -18,62 +18,30 @@ use Drupal\drupal_ajax_form_example\Form\TabulatorForm;
 class ConcertTicketSalesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * @var \Drupal\drupal_ajax_form_example\TabulatorData
-   */
-  protected $entityQuery;
-
-  /**
-   * TabulatorBlock constructor.
-   *
-   * @param array $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
-   * @param $entity_query
-   *   query from tabulator data.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $entity_query) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityQuery = $entity_query;
-  }
-
-  /**
-   * Service to inject tabulator data.
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('drupal_ajax_form_example.concert_data')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
+   * Block to show tickets sold for each venue and artist.
    */
   public function build() {
+
     $build = [];
 
-    /*
-     * Start building variables for template from taxonomies.
-     *
-     */
-    $venues = $this->entityQuery->venuesAll();
-    $artists = $this->entityQuery->artistsAll();
+    $concerts = [
+                  ['venue' => 'Granada', 'abrv' => 'granada', 'artist' => ['tbr', 'ltj'], 'ticket_limit' => 100, 'underage' => 30, 'adult' => 20],
+                  ['venue' => 'Emo\'s Tavern', 'abrv' => 'emos', 'artist' => 'mxpx', 'ticket_limit' => 200, 'underage' => 30, 'adult' => 20 ],
+                  ['venue' => 'Bottleneck', 'abrv' => 'bneck', 'artist' => 'ltj', 'ticket_limit' => 300, 'underage' => 30, 'adult' => 20 ],
+                ];
 
-    // Check to make sure service returns array.
-    if (is_array($audiences) && is_array($courses)) {
+    $artists = [
+                  ['artist' => 'tbr', 'abrv' => 'tbr', 'lineup' => ['Teenage Bottle Rocket', 'Less Than Jake'], 'tickets_sold' => 10 ],
+                  ['artist' => 'ltj', 'abrv' => 'ltj', 'lineup' => 'Less Than Jake', 'tickets_sold' => 20 ],
+                  ['artist' => 'mxpx', 'abrv' => 'mxpx', 'lineup' => 'MXPX', 'tickets_sold' => 30 ],
+                ];
 
-      $concert_block = new AjaxForm($venues, $artists);
+    $concert_block = new AjaxForm($venues, $artists);
 
-      $concertForm = \Drupal::formBuilder()->getForm($concert_block);
+    $concertForm = \Drupal::formBuilder()->getForm($concert_block);
 
-      $build['cost_form'] = $concertForm;
+    $build['concert_form'] = $concertForm;
 
-    }
-    else {
-      return $build['cost_form'] = 'There was an error for the services.';
-    }
     return $build;
   }
 

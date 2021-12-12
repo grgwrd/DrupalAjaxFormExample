@@ -15,17 +15,17 @@ class AjaxForm extends FormBase {
    */
   protected $concerts;
 
-  protected $ticket_fees;
+  protected $artists;
 
   /**
    * TabulatorBlock constructor.
    *
    * @param $concerts
-   * @param $ticket_fees
+   * @param $artists
    */
-  public function __construct($concerts, $ticket_fees) {
+  public function __construct($concerts, $artists) {
     $this->concerts = $concerts;
-    $this->ticket_fees = $ticket_fees;
+    $this->artists = $artists;
   }
 
   /**
@@ -48,14 +48,14 @@ class AjaxForm extends FormBase {
 
     // Set global variables for form.
     $concerts = $this->concerts;
-    $tickets = $this->ticket_fees;
+    $artists= $this->artists;
 
     /*
      * Default values for select dropdown lists on first page load.
-     * Venues: Granada
+     * Venues: Bottleneck
      * Artist: Less Than Jake
      */
-    $venue_selected = 'granada';
+    $venue_selected = 'bneck';
     $artist_selected = 'ltj';
 
     // Radio Buttons
@@ -73,7 +73,7 @@ class AjaxForm extends FormBase {
     $concert_venues = [];
 
     foreach ($concerts as $concert) {
-      $concert_options[$concert['concert_venues_abbreviation']] = $concert['title'];
+      $concert_options[$concert['abrv']] = $concert['venue'];
     }
 
     // Drop down list for concert venues.
@@ -154,7 +154,7 @@ class AjaxForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Form submitted'),
       '#ajax' => [
-        'callback' => [$this, 'ajax_states_callback'],
+        'callback' => [$this, 'ajax_states_callback'], // Call back function.
         'disable-refocus' => TRUE,
         'wrapper' => 'ajax-container',
         'event' => 'click',
@@ -171,6 +171,9 @@ class AjaxForm extends FormBase {
 
   }
 
+  /**
+  * Return ticket cost based on audience selected, underage or adult ticket cost.
+  */
   public function concertTicketCosts($concerts, $artist_selected) {
 
     $concert_ticket_cost = $concerts[$artist_selected]['field_cost_per_ticket'];
@@ -183,22 +186,30 @@ class AjaxForm extends FormBase {
 
   }
 
+  /**
+  * Return total ticket cost.
+  */
   public function totalTicketCost($number_of_tickets, $concert_ticket_cost) {
 
     return  $number_of_tickets * $concert_ticket_cost;
 
   }
 
+  /**
+  * Creates a number list for tickets drop down sold.
+  */
   public function getNumberOfTickets($venue_selected, $artist_selected) {
 
     $tickets_list = [];
 
-    for ($tickets = 0; $tickets <= 100; $tickets++) {
+    for ($tickets= 0; $tickets<= 100; $tickets++) {
       $tickets_list[$tickets] = $tickets;
     }
 
     return $tickets_list;
+    
   }
+
 
   /**
    * Returns ajax after form submit that triggers with onchange jQuery for course_fee_selected and ku_residents_selected.
@@ -215,13 +226,13 @@ class AjaxForm extends FormBase {
     $trigger_value = $form_state->getValue('trigger_value');
 
     $concerts = $this->concerts;
-    $tickets = $this->ticket_fees;
+    $artists= $this->artists;
 
-    $ticket_fees_list = $concerts[$venue_selected]['field_aud_artists'];
+    $artists_list = $concerts[$venue_selected]['field_aud_artists'];
 
     // Set new values and options for course dropdown.
     $form['concerts_container']['artists_selected']['#value'] = $artist_selected;
-    $form['concerts_container']['artists_selected']['#options'] = $ticket_fees_list;
+    $form['concerts_container']['artists_selected']['#options'] = $artists_list;
 
     $total_ticket_cost = totalTicketCost($number_of_tickets, $concert_ticket_cost);
 
@@ -233,8 +244,11 @@ class AjaxForm extends FormBase {
 
     $form['concerts_container']['course_hours']['#field_suffix']['#description'] = '<span class="sr-only"> credits @ $' . number_format($total_ticket_cost, 2) . '/ticket.</span>';
 
-    // Return including course hours.
-    $course_credit_cost = $this->courseCreditCost($tickets, $course_selected, $course_sub_hours);
+    // Ticket cost for selected concert venue and artist.
+    $concert_ticket_cost = $this->concertTicketCosts($venue_selected, $artist_selected);
+
+     // Number of tickets a venue can sell (capacity limit)
+    $ticket_list = getNumberOfTickets($concert_selected, $artist_selected);
 
     $course_title = $tickets[$course_selected]['title'];
 
@@ -244,7 +258,7 @@ class AjaxForm extends FormBase {
     $accessibility_msg = 'Total cost for concert venue at $' . number_format($cost_for_audience, 2) . ' each.';
 
     $form['concerts_container']['course_credit_cost']['#value'] = !empty($total_ticket_cost) ? $total_ticket_cost : 0;
-  
+
     $form['concerts_container']['accessibility']['#markup'] = '<span class="sr-only" aria-live="polite">' . $accessibility_msg . '</span>';
 
     return $form['concerts_container'];
@@ -266,7 +280,7 @@ class AjaxForm extends FormBase {
     $trigger_value = $form_state->getValue('trigger_value');
 
     $concerts = $this->concerts;
-    $tickets = $this->ticket_fees;
+    $artists= $this->artists;
 
     // Before form submits validate venue selected or artist selected reference each other.
     if ($trigger_value === 'venues_selected' || $trigger_value === 'artists_selected') {

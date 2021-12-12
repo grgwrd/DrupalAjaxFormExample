@@ -1,4 +1,4 @@
-drupal_ajax_form_example.tabulator_form:
+drupal_ajax_form_example.ajax_form:
   path: '/drupal_ajax_form_example/form/tabulator'
   defaults:
     _form: '\Drupal\drupal_ajax_form_example\Form\AjaxForm'
