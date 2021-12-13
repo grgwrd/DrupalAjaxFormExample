@@ -5,7 +5,7 @@
       'use strict';
 
       // Trigger the event to submit form.
-      $('.venues-select, .artists-select , tickets-select, input[name="ages"]:radio').change(function() {
+      $('.venues-select, .artists-select , .tickets-select, input[name="ages"]:radio').change(function() {
 
           // Add name of input to trigger input value to help backend.
           let input_name = $(this).attr('name');
