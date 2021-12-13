@@ -100,7 +100,6 @@ class AjaxForm extends FormBase {
       '#type' => 'select',
       '#title' => 'in',
       '#default_value' => $artist_selected,
-      // Call function to set to correct options list from selected KS resident.
       '#options' => $concerts_fee_list,
       '#validated' => TRUE,
       '#attributes' => [
@@ -155,8 +154,7 @@ class AjaxForm extends FormBase {
         'disable-refocus' => TRUE,
         'wrapper' => 'ajax-container',
         'event' => 'click',
-        // Added custom throbber in jquery.
-        'progress' => ['type' => 'none'],
+        'progress' => ['type' => 'none'], // Added custom throbber in jquery.
       ],
       '#attributes' => [
         'class' => ['sr-only'],
@@ -169,7 +167,7 @@ class AjaxForm extends FormBase {
   }
 
   /**
-  * Return ticket cost based on audience selected, underage or adult ticket cost.
+  * Return ticket cost based on selected underage or adult ticket cost.
   */
   public function concertTicketCosts($concerts, $artist_selected) {
 
@@ -222,42 +220,39 @@ class AjaxForm extends FormBase {
     // Name of the input element changed on form.
     $trigger_value = $form_state->getValue('trigger_value');
 
+    // Global form vars.
     $concerts = $this->concerts;
     $artists= $this->artists;
 
+    // Artists list for venue selected on change.
     $artists_list = $concerts[$venue_selected]['field_aud_artists'];
 
     // Set new values and options for course dropdown.
     $form['concerts_container']['artists_selected']['#value'] = $artist_selected;
     $form['concerts_container']['artists_selected']['#options'] = $artists_list;
 
+    // Total sum cost of tickets.
     $total_ticket_cost = totalTicketCost($number_of_tickets, $concert_ticket_cost);
+
+    // Number of tickets a venue can sell (capacity limit)
+   $ticket_list = getNumberOfTickets($concert_selected, $artist_selected);
 
     // Return new Annual course hours.
     $form['concerts_container']['number_of_tickets_selected']['#value'] = $number_of_tickets_selected;
-    $form['concerts_container']['number_of_tickets_selected']['#options'] = $select_hours['course_hour_list'];
-    $form['concerts_container']['course_hours']['#field_suffix'] = '<span> credits @ $'
+    $form['concerts_container']['number_of_tickets_selected']['#options'] = $ticket_list;
+    $form['concerts_container']['ticket_total']['ticket_cost']['#field_suffix'] = '<span> credits @ $'
       . number_format($total_ticket_cost, 2) . '/ticket.</span>';
-
-    $form['concerts_container']['course_hours']['#field_suffix']['#description'] = '<span class="sr-only"> credits @ $' . number_format($total_ticket_cost, 2) . '/ticket.</span>';
 
     // Ticket cost for selected concert venue and artist.
     $concert_ticket_cost = $this->concertTicketCosts($venue_selected, $artist_selected);
 
-     // Number of tickets a venue can sell (capacity limit)
-    $ticket_list = getNumberOfTickets($concert_selected, $artist_selected);
-
-    $course_title = $tickets[$course_selected]['title'];
-
-    $cost_tuition = $this->calculateTicketCost($cost_for_audience, $course_hours, $course_credit_cost, $course_sub_hours);
-
-    // Start accessibility message.
-    $accessibility_msg = 'Total cost for concert venue at $' . number_format($cost_for_audience, 2) . ' each.';
-
-    $form['concerts_container']['course_credit_cost']['#value'] = !empty($total_ticket_cost) ? $total_ticket_cost : 0;
-
+    // Create accessibility message.
+    $accessibility_msg = 'Total cost for concert venue at $' . number_format($total_ticket_cost, 2) . ' each.';
+    
+    // Add accessibility message.
     $form['concerts_container']['accessibility']['#markup'] = '<span class="sr-only" aria-live="polite">' . $accessibility_msg . '</span>';
 
+    // Ajax return form container on submit change.
     return $form['concerts_container'];
 
   }
