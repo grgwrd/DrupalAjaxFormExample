@@ -152,7 +152,7 @@ class AjaxForm extends FormBase {
       '#ajax' => [
         'callback' => [$this, 'ajax_states_callback'], // Call back function.
         'disable-refocus' => TRUE,
-        'wrapper' => 'ajax-container',
+        'wrapper' => 'ajax-container', // html container for form submit update.
         'event' => 'click',
         'progress' => ['type' => 'none'], // Added custom throbber in jquery.
       ],
@@ -248,7 +248,7 @@ class AjaxForm extends FormBase {
 
     // Create accessibility message.
     $accessibility_msg = 'Total cost for concert venue at $' . number_format($total_ticket_cost, 2) . ' each.';
-    
+
     // Add accessibility message.
     $form['concerts_container']['accessibility']['#markup'] = '<span class="sr-only" aria-live="polite">' . $accessibility_msg . '</span>';
 
