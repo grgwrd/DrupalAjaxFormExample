@@ -10,7 +10,7 @@ class AjaxForm extends FormBase {
   /**
    * @var array
    */
-  protected $concerts;
+  protected $venues;
 
   protected $artists;
 
@@ -20,8 +20,8 @@ class AjaxForm extends FormBase {
    * @param $concerts
    * @param $artists
    */
-  public function __construct($concerts, $artists) {
-    $this->concerts = $concerts;
+  public function __construct($venues, $artists) {
+    $this->venues = $venues;
     $this->artists = $artists;
   }
 
@@ -44,7 +44,7 @@ class AjaxForm extends FormBase {
     $form['#attributes']['autocomplete'] = 'off';
 
     // Set global variables for form.
-    $concerts = $this->concerts;
+    $venues = $this->venues;
     $artists= $this->artists;
 
     /*
@@ -69,8 +69,8 @@ class AjaxForm extends FormBase {
     // Create array for Convert venue options list dropdown.
     $concert_venues = [];
 
-    foreach ($concerts as $concert) {
-      $concert_options[$concert['abrv']] = $concert['venue'];
+    foreach ($venues as $venue) {
+      $concert_options[$venue['abrv']] = $venue['venue'];
     }
 
     // Drop down list for concert venues.

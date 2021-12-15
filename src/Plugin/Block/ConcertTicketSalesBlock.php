@@ -15,7 +15,7 @@ use Drupal\drupal_ajax_form_example\Form\AjaxForm;
  *  admin_label = @Translation("Concert Ticket Sales block"),
  * )
  */
-class ConcertTicketSalesBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class ConcertTicketSalesBlock extends BlockBase {
 
   /**
    * Block to show tickets sold for each venue and artist.
@@ -24,7 +24,7 @@ class ConcertTicketSalesBlock extends BlockBase implements ContainerFactoryPlugi
 
     $build = [];
 
-    $concerts = [
+    $venues = [
                   ['venue' => 'Granada', 'abrv' => 'granada', 'artist' => ['tbr', 'ltj'], 'ticket_limit' => 100, 'underage' => 30, 'adult' => 20],
                   ['venue' => 'Emo\'s Tavern', 'abrv' => 'emos', 'artist' => 'mxpx', 'ticket_limit' => 200, 'underage' => 30, 'adult' => 20 ],
                   ['venue' => 'Bottleneck', 'abrv' => 'bneck', 'artist' => 'ltj', 'ticket_limit' => 300, 'underage' => 30, 'adult' => 20 ],
@@ -35,6 +35,9 @@ class ConcertTicketSalesBlock extends BlockBase implements ContainerFactoryPlugi
                   ['artist' => 'ltj', 'abrv' => 'ltj', 'lineup' => 'Less Than Jake', 'tickets_sold' => 20 ],
                   ['artist' => 'mxpx', 'abrv' => 'mxpx', 'lineup' => 'MXPX', 'tickets_sold' => 30 ],
                 ];
+
+    // $concerts = [];
+    // $artists = [];
 
     $concert_block = new AjaxForm($venues, $artists);
 
