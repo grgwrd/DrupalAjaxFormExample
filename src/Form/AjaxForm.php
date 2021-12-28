@@ -207,7 +207,7 @@ class AjaxForm extends FormBase {
 
 
   /**
-   * Returns ajax after form submit that triggers with onchange jQuery for course_fee_selected and ku_residents_selected.
+   * Returns ajax after form submit that triggers with onchange jQuery.
    */
   public function ajax_states_callback(array &$form, FormStateInterface $form_state) {
 
